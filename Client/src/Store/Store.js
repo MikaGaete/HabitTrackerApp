@@ -1,8 +1,12 @@
 import {configureStore} from "@reduxjs/toolkit";
-import {userSlice} from "./Slices/User/userSlice.js";
+import {authSlice} from "./Slices/Auth/authSlice.js";
+import {assetsSlice} from "./Slices/Assets/assetsSlice.js";
+import {userDataSlice} from "./Slices/UserData/userDataSlice.js";
 
 export const store = configureStore({
     reducer: {
-        user: userSlice.reducer
+        auth: authSlice.reducer,
+        assets: assetsSlice.reducer,
+        userData: userDataSlice.reducer
     }
 })

@@ -1,11 +1,9 @@
 import {useNavigate} from "react-router-dom";
-import {useContext} from "react";
-import {HabitsContext} from "../Habits/HabitsContext.jsx";
+import {useSelector} from "react-redux";
 
 export const HabitCreationCard = ({name, icon, color, category}) => {
     const navigate = useNavigate();
-    const {Colors} = useContext(HabitsContext);
-
+    const {Colors} = useSelector(state => state.assets);
 
     const ExpandHabit = () => {
         navigate(`/habit/new/${category}/${name}/${icon}/${color}`)

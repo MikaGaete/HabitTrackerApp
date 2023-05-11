@@ -1,9 +1,6 @@
 import {Link, useParams} from "react-router-dom";
-import {useGetHabit} from "../Utilities/useGetHabit.jsx";
 import {buildStyles, CircularProgressbar} from "react-circular-progressbar";
-import {useTimeManager} from "../Utilities/useTimeManager.jsx";
-import {useGetHistoryIndex} from "../Utilities/useGetHistoryIndex.jsx";
-import {useUpdateHabit} from "../Utilities/useUpdateHabit.jsx";
+import {useGetHabit, useGetHistoryIndex, useTimeManager, useUpdateHabit} from "@utilities/UtilitiesAux.jsx";
 
 export const HabitPage = () => {
     const {id} = useParams();
@@ -16,7 +13,9 @@ export const HabitPage = () => {
     const updateProgress = (event) => {
         event.preventDefault();
         habit.history[historyIndex].progress = prompt('Enter the habit progression');
-        updateHabit(id, habit);
+        if (habit.history[historyIndex].progress !== null) {
+            updateHabit(id, habit);
+        }
     }
 
     return (
@@ -41,32 +40,6 @@ export const HabitPage = () => {
                             textColor: '#000000',
                             trailColor: '#d6d6d6',
                         })} />
-                    </div>
-                    <div className="flex items-center justify-center -m-6 overflow-hidden bg-white rounded-full">
-                        <svg className="w-32 h-32 transform translate-x-1 translate-y-1" x-cloak aria-hidden="true">
-                            <circle
-                                className="text-gray-300"
-                                stroke-width="10"
-                                stroke="currentColor"
-                                fill="transparent"
-                                r="50"
-                                cx="60"
-                                cy="60"
-                            />
-                            <circle
-                                className="text-blue-600"
-                                stroke-width="10"
-                                stroke-dasharray="circumference"
-                                stroke-dashoffset="circumference - percent / 100 * circumference"
-                                stroke-linecap="round"
-                                stroke="currentColor"
-                                fill="transparent"
-                                r="50"
-                                cx="60"
-                                cy="60"
-                            />
-                        </svg>
-                        <span className="absolute text-2xl text-blue-700" x-text="`${percent}%`"></span>
                     </div>
                     <button className={'bg-amber-600 w-10 h-10 mx-auto mt-5 rounded-3xl'} onClick={updateProgress}>
                     </button>

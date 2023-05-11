@@ -1,14 +1,12 @@
-import {useContext} from "react";
-import {HabitsContext} from "../Habits/HabitsContext.jsx";
-import {UserContext} from "../UserData/UserContext.jsx";
-import {HabitCreationCard} from "../Components/HabitCreationCard.jsx";
-import {HabitCard} from "../Components/HabitCard.jsx";
+import {HabitCreationCard} from "@components/HabitCreationCard.jsx";
 import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 export const HabitCreation = () => {
-    const {Habits, Colors} = useContext(HabitsContext);
+    const {Habits} = useSelector(state => state.assets)
     const categories = Object.keys(Habits);
 
+    console.log(Habits)
     return (
         <div className={'w-[100%] h-full min-h-screen'}>
             <div className={'flex flex-col justify-between min-h-screen h-full p-4'}>

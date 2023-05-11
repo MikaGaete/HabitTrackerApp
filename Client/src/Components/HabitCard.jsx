@@ -1,14 +1,13 @@
 import {useNavigate} from "react-router-dom";
-import {useContext, useState} from "react";
-import {HabitsContext} from "../Habits/HabitsContext.jsx";
-import {UserContext} from "../UserData/UserContext.jsx";
-import {useTimeManager} from "../Utilities/useTimeManager.jsx";
-import {useGetHistoryIndex} from "../Utilities/useGetHistoryIndex.jsx";
+import {useState} from "react";
+import {useSelector} from "react-redux";
+import {useGetHistoryIndex, useTimeManager} from "@utilities/UtilitiesAux.jsx";
+import {LocalDelete} from "../Store/Slices/UserData/thunks.js";
 
 export const HabitCard = ({name, icon, color, goal, id, history}) => {
     const navigate = useNavigate();
-    const {LocalDelete} = useContext(UserContext);
-    const {Colors} = useContext(HabitsContext);
+    //const {LocalDelete} = useContext(UserContext);
+    const {Colors} = useSelector(state => state.assets)
     const [expandMenu, setExpandMenu] = useState(false);
     const {currentDate} = useTimeManager();
     const formattedDate = currentDate.month + '/' + currentDate.day + '/' + currentDate.year;

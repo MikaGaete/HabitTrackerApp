@@ -1,15 +1,15 @@
-import {Notifications} from "../Utilities/Notifications.jsx";
-import {useContext, useEffect, useState} from "react";
-import {UserContext} from "../UserData/UserContext.jsx";
-import {HabitCard} from "../Components/HabitCard.jsx";
+import {useEffect, useState} from "react";
+import {HabitCard} from "@components/HabitCard.jsx";
 import {buildStyles, CircularProgressbar} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {Link} from "react-router-dom";
-import {useTimeManager} from "../Utilities/useTimeManager.jsx";
+import {Notifications, useTimeManager} from "@utilities/UtilitiesAux.jsx";
+import {useSelector} from "react-redux";
 
 export const Landing = () => {
     const {currentDate, currentTime, Time} = useTimeManager();
-    const {habits} = useContext(UserContext);
+    //const {habits} = useContext(UserContext);
+    const {habits} = useSelector(state => state.userData)
     const [dateChangeAvailable, setDateChangeAvailable] = useState(true);
     const not = new Notifications();
     not.componentDidMount();

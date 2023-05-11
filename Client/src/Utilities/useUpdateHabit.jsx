@@ -1,8 +1,7 @@
-import {useContext} from "react";
-import {UserContext} from "../UserData/UserContext.jsx";
+import {useSelector} from "react-redux";
 
 export const useUpdateHabit = () => {
-    const {habits} = useContext(UserContext);
+    const {habits} = useSelector(state => state.useReducer());
 
     const updateHabit = (id, habit) => {
         for (let i = 0; i < habits.length; i++) {

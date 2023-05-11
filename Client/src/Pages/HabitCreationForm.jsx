@@ -1,11 +1,11 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {useContext, useState} from "react";
-import {HabitsContext} from "../Habits/HabitsContext.jsx";
-import {UserContext} from "../UserData/UserContext.jsx";
+import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {addHabit, updateLocalSave} from "../Store/Slices/UserData/userDataSlice.js";
 
 export const HabitCreationForm = () => {
-    const {Colors, Icons} = useContext(HabitsContext);
-    const {habits, LocalSave} = useContext(UserContext);
+    const {Colors, Icons} = useSelector(state => state.assets);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const {category, name, icon, color} = useParams();
     const [notifications, setNotifications] = useState(false);
@@ -79,23 +79,22 @@ export const HabitCreationForm = () => {
     const onSubmit = async (event) => {
         event.preventDefault();
 
-        await LocalSave(
-            {
-                id: makeid(10),
-                type: selectedAtributes.type,
-                name: selectedAtributes.name,
-                icon: selectedAtributes.icon,
-                color: selectedAtributes.color,
-                goal: {
-                    number: selectedAtributes.goalValue,
-                    unit: selectedAtributes.goalUnit
-                },
-                frequency: selectedAtributes.days,
-                reminders: selectedAtributes.notifications,
-                message: "",
-                history: []
-            }
-        );
+        dispatch(addHabit({
+            id: makeid(10),
+            type: selectedAtributes.type,
+            name: selectedAtributes.name,
+            icon: selectedAtributes.icon,
+            color: selectedAtributes.color,
+            goal: {
+                number: selectedAtributes.goalValue,
+                unit: selectedAtributes.goalUnit
+            },
+            frequency: selectedAtributes.days,
+            reminders: selectedAtributes.notifications,
+            message: "",
+            history: []
+        }))
+        dispatch(updateLocalSave());
 
         navigate('/');
     }
