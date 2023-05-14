@@ -5,6 +5,7 @@ export const useTimeManager = () => {
     Time.setTime(Date.now())
     const [currentDate, setCurrentDate] = useState({ day: (Time.getDate()), month: Time.getMonth() + 1, year: Time.getFullYear() })
     const [currentTime, setCurrentTime] = useState({ hours: Time.getHours(), minutes: Time.getMinutes() });
+    const [formattedDate, setFormattedDate] = useState(currentDate.month + '/' + currentDate.day + '/' + currentDate.year);
     const msMinute = 60000;
 
     useEffect(() => {
@@ -25,5 +26,9 @@ export const useTimeManager = () => {
         return () => clearInterval(interval);
     }, [])
 
-    return {currentDate, currentTime, Time}
+    useEffect(() => {
+        setFormattedDate(currentDate.month + '/' + currentDate.day + '/' + currentDate.year);
+    }, [currentDate]);
+
+    return {currentDate, currentTime, Time, formattedDate}
 }

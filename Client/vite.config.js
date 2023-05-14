@@ -10,6 +10,9 @@ export default defineConfig({
       '@habits': path.resolve(__dirname, './src/Habits'),
       '@pages': path.resolve(__dirname, './src/Pages'),
       '@utilities': path.resolve(__dirname, './src/Utilities'),
+      '@assets': path.resolve(__dirname, './src/Store/Slices/Assets'),
+      '@auth': path.resolve(__dirname, './src/Store/Slices/Auth'),
+      '@userData': path.resolve(__dirname, './src/Store/Slices/UserData'),
     }
   },
   plugins: [react()],

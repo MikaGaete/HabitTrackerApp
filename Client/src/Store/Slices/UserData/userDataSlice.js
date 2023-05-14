@@ -7,7 +7,6 @@ export const userDataSlice = createSlice({
     },
     reducers: {
         addHabit: (state, action) => {
-            console.log(action)
             state.habits = [...state.habits, action.payload]
         },
         deleteHabit: (state, action) => {
@@ -19,6 +18,23 @@ export const userDataSlice = createSlice({
             }
             state.habits = tempArray;
         },
+        updateHabitHistory: (state, action) => {
+            for (let i = 0; i < state.habits.length; i++) {
+                let exists = false;
+                for (let j = (state.habits[i].history.length - 1); j > -1; j--) {
+                    if (state.habits[i].history[j].date === action.payload) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    state.habits[i].history = [...state.habits[i].history, {date: action.payload, progress: 0}]
+                }
+            }
+        },
+        updateHabitProgress: (state, action) => {
+            state.habits[action.payload.habitIndex].history[action.payload.historyIndex].progress = action.payload.newProgress;
+        },
         updateLocalSave: (state) => {
             localStorage.removeItem('HabitTrackerAppData');
             localStorage.setItem('HabitTrackerAppData', JSON.stringify(state.habits));
@@ -26,4 +42,4 @@ export const userDataSlice = createSlice({
     }
 })
 
-export const {addHabit, deleteHabit, updateLocalSave} = userDataSlice.actions;
+export const {addHabit, deleteHabit, updateHabitHistory, updateHabitProgress, updateLocalSave} = userDataSlice.actions;

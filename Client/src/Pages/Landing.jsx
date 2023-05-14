@@ -4,21 +4,19 @@ import {buildStyles, CircularProgressbar} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {Link} from "react-router-dom";
 import {Notifications, useTimeManager} from "@utilities/UtilitiesAux.jsx";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {updateHabitHistory, updateLocalSave} from "@userData/userDataSlice.js";
 
 export const Landing = () => {
     const {currentDate, currentTime, Time} = useTimeManager();
-    //const {habits} = useContext(UserContext);
     const {habits} = useSelector(state => state.userData)
-    const [dateChangeAvailable, setDateChangeAvailable] = useState(true);
+    const [historyReady, setHistoryReady] = useState(false);
     const not = new Notifications();
+    const dispatch = useDispatch();
     not.componentDidMount();
-
-    console.log(currentDate, currentTime);
 
     useEffect(() => {
         for (let i = 0; i < habits.length - 1; i++) {
-            console.log(habits[i]);
             habits[i].frequency.forEach((day) => {
                 if (day === (new Intl.DateTimeFormat("en-US", {weekday: "long"}).format(Time))) {
                     habits[i].reminders.forEach((reminder) => {
@@ -35,25 +33,13 @@ export const Landing = () => {
     useEffect(() => {
         const formattedDate = currentDate.month + '/' + currentDate.day + '/' + currentDate.year;
 
-        for (let i = 0; i < habits.length; i++) {
-            let exists = false;
-            for (let j = (habits[i].history.length - 1); j > -1; j--) {
-                if (habits[i].history[j].date === formattedDate) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                habits[i].history.push({
-                    date: formattedDate,
-                    progress: 0
-                })
-            }
-        }
+        dispatch(updateHabitHistory(formattedDate));
+        dispatch(updateLocalSave());
+        setHistoryReady(true);
     }, [currentDate]);
 
     return (
-        <div className={'w-[100vw] h-full min-h-screen'}>
+        historyReady && <div className={'w-[100vw] h-full min-h-screen'}>
             <div className={'flex flex-col justify-between min-h-screen h-full p-4'}>
                 <div className={'flex flex-col justify-around h-full mx-auto'}>
                     <div className={'mx-auto font-bold text-2xl'}>
@@ -76,15 +62,15 @@ export const Landing = () => {
                 </div>
                 <div className={'flex flex-row justify-around w-[100%] lg:w-[50%] mx-auto bottom-0'}>
                     <Link to={'/habit/new'}  className={'my-auto'}>
-                        <img className={'w-[45px] h-[45px] rotate-45 cursor-pointer'} src={'http://192.168.100.45/Add.svg'}/>
+                        <img className={'w-[45px] h-[45px] rotate-45 cursor-pointer'} src={'/src/images/Add.svg'}/>
                     </Link>
                     <div>2</div>
                     <div className={'my-auto'}>
-                        <img className={'w-[40px] h-[40px]'} src={'http://192.168.100.45/Profile.png'}/>
+                        <img className={'w-[40px] h-[40px]'} src={'/src/images/Profile.png'}/>
                     </div>
                     <div>4</div>
                     <div className={'my-auto'}>
-                        <img className={'w-[40px] h-[40px] cursor-pointer'} src={'http://192.168.100.45/Settings.png'}/>
+                        <img className={'w-[40px] h-[40px] cursor-pointer'} src={'/src/images/Settings.png'}/>
                     </div>
                 </div>
             </div>

@@ -1,20 +1,24 @@
 import {Link, useParams} from "react-router-dom";
 import {buildStyles, CircularProgressbar} from "react-circular-progressbar";
-import {useGetHabit, useGetHistoryIndex, useTimeManager, useUpdateHabit} from "@utilities/UtilitiesAux.jsx";
+import {useGetHabit, useGetHistoryIndex, useTimeManager} from "@utilities/UtilitiesAux.jsx";
+import {useDispatch} from "react-redux";
+import {updateHabitProgress, updateLocalSave} from "@userData/userDataSlice.js";
 
 export const HabitPage = () => {
     const {id} = useParams();
     const habit = useGetHabit(id);
-    const {currentDate} = useTimeManager();
-    const formattedDate = currentDate.month + '/' + currentDate.day + '/' + currentDate.year;
-    const historyIndex = useGetHistoryIndex(habit.history, formattedDate);
-    const updateHabit = useUpdateHabit();
+    const {formattedDate} = useTimeManager();
+    const historyIndex = useGetHistoryIndex(habit.data.history, formattedDate);
+    const dispatch = useDispatch();
 
     const updateProgress = (event) => {
         event.preventDefault();
-        habit.history[historyIndex].progress = prompt('Enter the habit progression');
-        if (habit.history[historyIndex].progress !== null) {
-            updateHabit(id, habit);
+        const newProgress = prompt('Enter the habit progression');
+        const habitIndex = habit.index;
+
+        if (newProgress !== null) {
+            dispatch(updateHabitProgress({habitIndex, historyIndex, newProgress}));
+            dispatch(updateLocalSave());
         }
     }
 
@@ -23,18 +27,18 @@ export const HabitPage = () => {
             <div className={'flex flex-col justify-between min-h-screen h-full p-4'}>
                 <div className={'flex flex-row justify-between w-[100%] lg:w-[90%] mx-auto'}>
                     <Link to={'/'}>
-                        <img className={'w-[30px] h-[30px]'} src={'http://192.168.100.45/BackArrow.png'}/>
+                        <img className={'w-[30px] h-[30px]'} src={'/src/images/BackArrow.png'}/>
                     </Link>
                     <div className={'font-bold text-2xl'}>
                         {habit.name}
                     </div>
                     <div>
-                        <img className={'w-[30px] h-[30px]'} src={'http://192.168.100.45/Profile.png'}/>
+                        <img className={'w-[30px] h-[30px]'} src={'/src/images/Profile.png'}/>
                     </div>
                 </div>
-                <div className={'flex flex-col justify-around h-full w-[90%] lg:w-[50%] mx-auto my-auto'}>
+                <div className={'flex flex-col justify-around h-full w-[90%] lg:w-[70%] mx-auto my-auto'}>
                     <div className={'text-center mx-auto my-auto'}>
-                        <CircularProgressbar value={50} text={`${habit.history[historyIndex].progress} / ${habit.goal.number} ${habit.goal.unit}`} styles={buildStyles({
+                        <CircularProgressbar value={50} text={`${habit.data.history[historyIndex].progress} / ${habit.data.goal.number} ${habit.data.goal.unit}`} styles={buildStyles({
                             textSize: '15px',
                             pathColor: `rgba(0, 0, 0, 1)`,
                             textColor: '#000000',

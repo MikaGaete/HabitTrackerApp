@@ -14,3 +14,11 @@ export const LocalDelete = (habitID) => {
         dispatch(updateLocalSave());
     }
 }
+
+export const updateHabitProgress = (habitIndex, historyIndex, newProgress) => {
+    console.log(4)
+    return async (dispatch) => {
+        dispatch(updateHabitProgress(habitIndex, historyIndex, newProgress));
+        dispatch(updateLocalSave());
+    }
+}

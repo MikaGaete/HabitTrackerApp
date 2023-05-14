@@ -1,7 +1,7 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addHabit, updateLocalSave} from "../Store/Slices/UserData/userDataSlice.js";
+import {addHabit, updateLocalSave} from "@userData/userDataSlice.js";
 
 export const HabitCreationForm = () => {
     const {Colors, Icons} = useSelector(state => state.assets);
@@ -104,13 +104,13 @@ export const HabitCreationForm = () => {
             <div className={'flex flex-col justify-between min-h-screen h-full p-4'}>
                 <div className={'flex flex-row justify-between w-[100%] lg:w-[90%] mx-auto'}>
                     <Link to={'/habit/new'}>
-                        <img className={'w-[30px] h-[30px]'} src={'http://192.168.100.45/BackArrow.png'}/>
+                        <img className={'w-[30px] h-[30px]'} src={'/src/images/BackArrow.png'}/>
                     </Link>
                     <div className={'font-bold text-2xl'}>
                         New Habit
                     </div>
                     <div>
-                        <img className={'w-[30px] h-[30px]'} src={'http://192.168.100.45/Profile.png'}/>
+                        <img className={'w-[30px] h-[30px]'} src={'/src/images/Profile.png'}/>
                     </div>
                 </div>
                 <form className={' flex flex-col justify-around h-full w-[90%] lg:w-[50%] mx-auto my-2'} onSubmit={onSubmit}>
@@ -138,7 +138,7 @@ export const HabitCreationForm = () => {
                                         </option>
                                     ))}
                                 </select>
-                                <img className={'w-16 h-16 my-auto ml-4'} src={`http://192.168.100.45/${selectedAtributes.icon}.png`}/>
+                                <img className={'w-16 h-16 my-auto ml-4'} src={`/src/images/${selectedAtributes.icon}.png`}/>
                             </div>
                         </div>
                     </div>
