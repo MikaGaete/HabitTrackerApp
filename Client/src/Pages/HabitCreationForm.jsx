@@ -104,13 +104,13 @@ export const HabitCreationForm = () => {
             <div className={'flex flex-col justify-between min-h-screen h-full p-4'}>
                 <div className={'flex flex-row justify-between w-[100%] lg:w-[90%] mx-auto'}>
                     <Link to={'/habit/new'}>
-                        <img className={'w-[30px] h-[30px]'} src={'/src/images/BackArrow.png'}/>
+                        <img className={'w-[30px] h-[30px]'} src={'/src/images/BackArrow.png'} alt={'BackArrow'}/>
                     </Link>
                     <div className={'font-bold text-2xl'}>
                         New Habit
                     </div>
                     <div>
-                        <img className={'w-[30px] h-[30px]'} src={'/src/images/Profile.png'}/>
+                        <img className={'w-[30px] h-[30px]'} src={'/src/images/Profile.png'} alt={'Profile'}/>
                     </div>
                 </div>
                 <form className={' flex flex-col justify-around h-full w-[90%] lg:w-[50%] mx-auto my-2'} onSubmit={onSubmit}>

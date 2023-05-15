@@ -5,15 +5,18 @@ import 'react-circular-progressbar/dist/styles.css';
 import {Link} from "react-router-dom";
 import {Notifications, useTimeManager} from "@utilities/UtilitiesAux.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {updateHabitHistory, updateLocalSave} from "@userData/userDataSlice.js";
+import {UpdateHabitHistory} from "@userData/thunks.js";
 
 export const Landing = () => {
-    const {currentDate, currentTime, Time} = useTimeManager();
+    const {currentDate, currentTime, Time, formattedDate} = useTimeManager();
     const {habits} = useSelector(state => state.userData)
     const [historyReady, setHistoryReady] = useState(false);
     const not = new Notifications();
     const dispatch = useDispatch();
     not.componentDidMount();
+
+
+    console.log(currentTime)
 
     useEffect(() => {
         for (let i = 0; i < habits.length - 1; i++) {
@@ -31,10 +34,8 @@ export const Landing = () => {
     }, [currentTime]);
 
     useEffect(() => {
-        const formattedDate = currentDate.month + '/' + currentDate.day + '/' + currentDate.year;
-
-        dispatch(updateHabitHistory(formattedDate));
-        dispatch(updateLocalSave());
+        console.log(habits)
+        dispatch(UpdateHabitHistory(formattedDate));
         setHistoryReady(true);
     }, [currentDate]);
 
@@ -58,7 +59,11 @@ export const Landing = () => {
                     </div>
                 </div>
                 <div className={'flex flex-col justify-around h-full w-[90%] lg:w-[50%] mx-auto'}>
-                    {habits.map((habit) => <HabitCard key={habit.name + habit.goal.number} {...habit} />)}
+                    {habits.map((habit) => {
+                        if (habit.frequency.includes(new Intl.DateTimeFormat("en-US", {weekday: "long"}).format(Time))) {
+                            return <HabitCard key={habit.name + habit.goal.number} {...habit} />
+                        }
+                    })}
                 </div>
                 <div className={'flex flex-row justify-around w-[100%] lg:w-[50%] mx-auto bottom-0'}>
                     <Link to={'/habit/new'}  className={'my-auto'}>

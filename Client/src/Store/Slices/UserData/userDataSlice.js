@@ -33,7 +33,7 @@ export const userDataSlice = createSlice({
             }
         },
         updateHabitProgress: (state, action) => {
-            state.habits[action.payload.habitIndex].history[action.payload.historyIndex].progress = action.payload.newProgress;
+            state.habits[action.payload.index].history[action.payload.historyIndex].progress = action.payload.newProgress;
         },
         updateLocalSave: (state) => {
             localStorage.removeItem('HabitTrackerAppData');

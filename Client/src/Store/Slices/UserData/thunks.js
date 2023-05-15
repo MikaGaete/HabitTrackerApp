@@ -1,4 +1,4 @@
-import {addHabit, deleteHabit, updateLocalSave} from "./userDataSlice.js";
+import {addHabit, deleteHabit, updateHabitHistory, updateHabitProgress, updateLocalSave} from "./userDataSlice.js";
 
 export const LocalSave = (habit) => {
     console.log('llegue')
@@ -15,10 +15,16 @@ export const LocalDelete = (habitID) => {
     }
 }
 
-export const updateHabitProgress = (habitIndex, historyIndex, newProgress) => {
-    console.log(4)
+export const UpdateHabitProgress = (props) => {
     return async (dispatch) => {
-        dispatch(updateHabitProgress(habitIndex, historyIndex, newProgress));
+        dispatch(updateHabitProgress(props));
+        dispatch(updateLocalSave());
+    }
+}
+
+export const UpdateHabitHistory = (props) => {
+    return async (dispatch) => {
+        dispatch(updateHabitHistory(props));
         dispatch(updateLocalSave());
     }
 }

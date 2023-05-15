@@ -1,17 +1,20 @@
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useGetHistoryIndex, useTimeManager} from "@utilities/UtilitiesAux.jsx";
+import {useGetHabit, useGetHistoryIndex, useTimeManager} from "@utilities/UtilitiesAux.jsx";
 import {deleteHabit} from "@userData/userDataSlice.js";
+import {useTranslateColor} from "@utilities/useTranslateColor.jsx";
 
 export const HabitCard = ({name, icon, color, goal, id, history}) => {
     const navigate = useNavigate();
-    const {Colors} = useSelector(state => state.assets)
-    const [expandMenu, setExpandMenu] = useState(false);
-    const {currentDate} = useTimeManager();
-    const formattedDate = currentDate.month + '/' + currentDate.day + '/' + currentDate.year;
-    const historyIndex = useGetHistoryIndex(history, formattedDate);
     const dispatch = useDispatch();
+    const {Colors} = useSelector(state => state.assets);
+    const {index, data}= useGetHabit(id);
+    const {formattedDate} = useTimeManager();
+    const {historyIndex} = useGetHistoryIndex(history, formattedDate);
+    const {fixedPrimaryColor, fixedSecondaryColor} = useTranslateColor(Colors[color].primary, Colors[color].secondary);
+    const [expandMenu, setExpandMenu] = useState(false);
+
 
     const ExpandOptions = (event) => {
         event.preventDefault();
