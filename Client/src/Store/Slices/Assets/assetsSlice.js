@@ -172,6 +172,10 @@ export const assetsSlice = createSlice({
             'Train-torso', 'Water', 'Creatine', 'Pre-workout',
             'Meditation', 'Coding', 'Reading', 'Studying',
             'Singing', 'Walter-white'
-        ]
+        ],
+        Days: [
+            'Select a day', 'Monday', 'Tuesday', 'Wednesday',
+            'Thursday', 'Friday', 'Saturday', 'Sunday'
+        ],
     }
 })

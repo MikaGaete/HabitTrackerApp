@@ -12,7 +12,7 @@ export const userDataSlice = createSlice({
         deleteHabit: (state, action) => {
             const tempArray = state.habits;
             for (let i = 0; i < state.habits.length; i++) {
-                if (state.habits[i].id === action.payload.habitID) {
+                if (state.habits[i].id === action.payload) {
                     tempArray.splice(i, 1);
                 }
             }

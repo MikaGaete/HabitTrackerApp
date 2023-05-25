@@ -15,11 +15,8 @@ export const Landing = () => {
     const dispatch = useDispatch();
     not.componentDidMount();
 
-
-    console.log(currentTime)
-
     useEffect(() => {
-        for (let i = 0; i < habits.length - 1; i++) {
+        for (let i = 0; i < habits.length; i++) {
             habits[i].frequency.forEach((day) => {
                 if (day === (new Intl.DateTimeFormat("en-US", {weekday: "long"}).format(Time))) {
                     habits[i].reminders.forEach((reminder) => {
@@ -34,7 +31,6 @@ export const Landing = () => {
     }, [currentTime]);
 
     useEffect(() => {
-        console.log(habits)
         dispatch(UpdateHabitHistory(formattedDate));
         setHistoryReady(true);
     }, [currentDate]);
@@ -67,15 +63,15 @@ export const Landing = () => {
                 </div>
                 <div className={'flex flex-row justify-around w-[100%] lg:w-[50%] mx-auto bottom-0'}>
                     <Link to={'/habit/new'}  className={'my-auto'}>
-                        <img className={'w-[45px] h-[45px] rotate-45 cursor-pointer'} src={'/src/images/Add.svg'}/>
+                        <img alt={'New Habit'} className={'w-[45px] h-[45px] rotate-45 cursor-pointer'} src={'/src/images/Add.svg'}/>
                     </Link>
                     <div>2</div>
-                    <div className={'my-auto'}>
-                        <img className={'w-[40px] h-[40px]'} src={'/src/images/Profile.png'}/>
-                    </div>
+                    <Link to={'/users/profile'} className={'my-auto'}>
+                        <img alt={'Profile'} className={'w-[40px] h-[40px]'} src={'/src/images/Profile.png'}/>
+                    </Link>
                     <div>4</div>
                     <div className={'my-auto'}>
-                        <img className={'w-[40px] h-[40px] cursor-pointer'} src={'/src/images/Settings.png'}/>
+                        <img alt={'Settings'} className={'w-[40px] h-[40px] cursor-pointer'} src={'/src/images/Settings.png'}/>
                     </div>
                 </div>
             </div>

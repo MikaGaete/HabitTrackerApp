@@ -17,7 +17,7 @@ export class Notifications extends Component {
     showNotification(name, icon, message) {
         var options = {
             body: message,
-            icon: `${icon}?    auto=compress&cs=tinysrgb&dpr=1&w=500`,
+            icon: `/src/images/${icon}.png?auto=compress&cs=tinysrgb&dpr=1&w=500`,
             dir: 'ltr',
         };
         new Notification(name, options)

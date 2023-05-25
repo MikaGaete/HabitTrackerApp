@@ -1,9 +1,8 @@
 import {Link, useParams} from "react-router-dom";
 import {buildStyles, CircularProgressbar} from "react-circular-progressbar";
-import {useGetHabit, useGetHistoryIndex, useTimeManager} from "@utilities/UtilitiesAux.jsx";
+import {useGetHabit, useGetHistoryIndex, useTimeManager, useTranslateColor} from "@utilities/UtilitiesAux.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {UpdateHabitProgress} from "@userData/thunks.js";
-import {useTranslateColor} from "@utilities/useTranslateColor.jsx";
 
 export const HabitPage = () => {
     const {id} = useParams();

@@ -1,18 +1,15 @@
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useGetHabit, useGetHistoryIndex, useTimeManager} from "@utilities/UtilitiesAux.jsx";
-import {deleteHabit} from "@userData/userDataSlice.js";
-import {useTranslateColor} from "@utilities/useTranslateColor.jsx";
+import {useGetHistoryIndex, useTimeManager} from "@utilities/UtilitiesAux.jsx";
+import {DeleteHabit} from "@userData/thunks.js";
 
 export const HabitCard = ({name, icon, color, goal, id, history}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {Colors} = useSelector(state => state.assets);
-    const {index, data}= useGetHabit(id);
     const {formattedDate} = useTimeManager();
     const {historyIndex} = useGetHistoryIndex(history, formattedDate);
-    const {fixedPrimaryColor, fixedSecondaryColor} = useTranslateColor(Colors[color].primary, Colors[color].secondary);
     const [expandMenu, setExpandMenu] = useState(false);
 
 
@@ -21,9 +18,9 @@ export const HabitCard = ({name, icon, color, goal, id, history}) => {
         setExpandMenu(!expandMenu);
     }
 
-    const DeleteHabit = (event) => {
+    const deleteHabit = (event) => {
         event.preventDefault();
-        dispatch(deleteHabit({habitID: id}));
+        dispatch(DeleteHabit(id));
     }
 
     const ExpandHabit = () => {
@@ -46,7 +43,7 @@ export const HabitCard = ({name, icon, color, goal, id, history}) => {
                     <div className={`${Colors[color].primary} w-16 h-16 my-1 border-2 hover:cursor-pointer flex justify-center items-center ml-3`}>
                         ...
                     </div>
-                    <div className={`${Colors[color].primary} w-16 h-16 my-1 border-2 hover:cursor-pointer flex justify-center items-center ml-3`} onClick={DeleteHabit}>
+                    <div className={`${Colors[color].primary} w-16 h-16 my-1 border-2 hover:cursor-pointer flex justify-center items-center ml-3`} onClick={deleteHabit}>
                         <img className={'w-8 h-8'} src={`/src/images/Remove-habit.png`} alt={'RemoveHabit'}/>
                     </div>
                 </>

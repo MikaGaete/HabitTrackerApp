@@ -1,104 +1,38 @@
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addHabit, updateLocalSave} from "@userData/userDataSlice.js";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {AddHabit} from "@userData/thunks.js";
+import {useCreateRandomString, useCreationFormManager} from "@utilities/UtilitiesAux.jsx";
 
 export const HabitCreationForm = () => {
-    const {Colors, Icons} = useSelector(state => state.assets);
+    const {Colors, Icons, Days} = useSelector(state => state.assets);
+    const colors = Object.keys(Colors);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {category, name, icon, color} = useParams();
-    const [notifications, setNotifications] = useState(false);
-    const [notificationArray, setNotificationArray] = useState([]);
-    const [dayArray, setDayArray] = useState([0]);
-    const [selectedAtributes, setSelectedAtributes] = useState({
-        type: category,
-        name: name,
-        icon: icon,
-        color: color,
-        goalValue: 0,
-        goalUnit: "",
-        notifications: [],
-        days: []
-    });
-
-    const makeid = (length) => {
-        let result = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength = characters.length;
-        let counter = 0;
-        while (counter < length) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-            counter += 1;
-        }
-        return result;
-    }
-
-    const Days = ['Select a day', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
-    const ArrayUpdate = (event, tempArray) => {
-        tempArray[event.target.name.slice(event.target.name.length - 1)] = event.target.value;
-        setSelectedAtributes({
-            ...selectedAtributes,
-            [event.target.name.slice(0, event.target.name.length - 1)]: tempArray
-        })
-    }
-
-    const changesManager = (event) => {
-        event.preventDefault();
-        if (event.target.name.slice(0, event.target.name.length - 1) === 'notifications') {
-            const aux = selectedAtributes.notifications;
-            ArrayUpdate(event, aux);
-        }
-        else if (event.target.name.slice(0, event.target.name.length - 1) === 'days') {
-            const aux = selectedAtributes.days;
-            ArrayUpdate(event, aux);
-        }
-        else {
-            setSelectedAtributes({
-                ...selectedAtributes,
-                [event.target.name]: event.target.value,
-            })
-        }
-    }
-
-    const addManager = (event) => {
-        event.preventDefault();
-        if (event.target.name === 'notifications') {
-            if (notificationArray.length === 0) {
-                setNotifications(true);
-            }
-            setNotificationArray([...notificationArray, notificationArray.length]);
-        }
-        if (event.target.name === 'days') {
-            if (dayArray.length === 7) return;
-            setDayArray([...dayArray, dayArray.length]);
-        }
-    }
+    const [selectedAttributes, dayArray, notifications, notificationArray, AddManager, ChangesManager] = useCreationFormManager(category, name, icon, color);
 
     const onSubmit = async (event) => {
         event.preventDefault();
 
-        dispatch(addHabit({
-            id: makeid(10),
-            type: selectedAtributes.type,
-            name: selectedAtributes.name,
-            icon: selectedAtributes.icon,
-            color: selectedAtributes.color,
+        dispatch(AddHabit({
+            id: useCreateRandomString(10),
+            type: selectedAttributes.type,
+            name: selectedAttributes.name,
+            icon: selectedAttributes.icon,
+            color: selectedAttributes.color,
             goal: {
-                number: selectedAtributes.goalValue,
-                unit: selectedAtributes.goalUnit
+                number: selectedAttributes.goalValue,
+                unit: selectedAttributes.goalUnit
             },
-            frequency: selectedAtributes.days,
-            reminders: selectedAtributes.notifications,
+            frequency: selectedAttributes.days,
+            reminders: selectedAttributes.notifications,
             message: "",
             history: []
-        }))
-        dispatch(updateLocalSave());
+        }));
 
         navigate('/');
     }
-    const colors = Object.keys(Colors);
+
     return (
         <div className={'w-[100%] h-full min-h-screen'}>
             <div className={'flex flex-col justify-between min-h-screen h-full p-4'}>
@@ -118,42 +52,42 @@ export const HabitCreationForm = () => {
                         <div className={'w-[48%]'}>
                             <legend>Color</legend>
                             <div className={'flex justify-between'}>
-                                <select className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-auto lg:w-[78%] mr-2`} name={'color'} defaultValue={color} onChange={changesManager}>
+                                <select className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-auto lg:w-[78%] mr-2`} name={'color'} defaultValue={color} onChange={ChangesManager}>
                                     {colors.map(Color => (
                                         <option key={Color} value={Color} className={'capitalize'}>
                                             {Color}
                                         </option>
                                     ))}
                                 </select>
-                                <div className={`${Colors[selectedAtributes.color].primary} h-16 w-16 p-4 rounded-lg my-1 flex justify-between border-2`}/>
+                                <div className={`${Colors[selectedAttributes.color].primary} h-16 w-16 p-4 rounded-lg my-1 flex justify-between border-2`}/>
                             </div>
                         </div>
                         <div className={'w-[48%]'}>
                             <legend>Icon</legend>
                             <div className={'flex justify-between'}>
-                                <select className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-auto lg:w-[78%] mr-2`} name={'icon'} defaultValue={icon} onChange={changesManager}>
+                                <select className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-auto lg:w-[78%] mr-2`} name={'icon'} defaultValue={icon} onChange={ChangesManager}>
                                     {Icons.map(Icon => (
                                         <option key={Icon} value={Icon}>
                                             {Icon}
                                         </option>
                                     ))}
                                 </select>
-                                <img className={'w-16 h-16 my-auto ml-4'} src={`/src/images/${selectedAtributes.icon}.png`}/>
+                                <img alt={selectedAttributes.icon} className={'w-16 h-16 my-auto ml-4'} src={`/src/images/${selectedAttributes.icon}.png`}/>
                             </div>
                         </div>
                     </div>
                     <div className={'w-full'}>
                         <legend>Name</legend>
-                        <input className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} name={'name'} type={'text'} onChange={changesManager} defaultValue={name} required/>
+                        <input className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} name={'name'} type={'text'} onChange={ChangesManager} defaultValue={name} required/>
                     </div>
                     <div className={'w-full flex flex-row justify-between'}>
                         <div className={'flex flex-col w-[48%]'}>
                             <legend>Goal</legend>
-                            <input className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} step={0.1} name={'goalValue'} type={'number'} onChange={changesManager} required/>
+                            <input className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} step={0.1} name={'goalValue'} type={'number'} onChange={ChangesManager} required/>
                         </div>
                         <div className={'flex flex-col w-[48%]'}>
                             <legend>Goal Unit</legend>
-                            <input className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} name={'goalUnit'} type={'text'} onChange={changesManager} required/>
+                            <input className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} name={'goalUnit'} type={'text'} onChange={ChangesManager} required/>
                         </div>
                     </div>
                     <div className={'w-full flex justify-between'}>
@@ -162,7 +96,7 @@ export const HabitCreationForm = () => {
                             <div>
                                 {
                                     dayArray.map((number) =>
-                                        <select key={number} className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} name={'days' + number} defaultValue={'Select a day'} onChange={changesManager}>
+                                        <select key={number} className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} name={'days' + number} defaultValue={'Select a day'} onChange={ChangesManager}>
                                             {
                                                 Days.map(Day => (
                                                     <option key={Day} value={Day} disabled={Day === 'Select a day' ? 'disabled' : ""}>
@@ -173,7 +107,7 @@ export const HabitCreationForm = () => {
                                         </select>
                                     )
                                 }
-                                {dayArray.length < 7 && <button className={`h-16 rounded-lg my-auto mx-auto flex justify-center items-center border-2 w-16 text-2xl`} name={'days'} onClick={addManager}> + </button>}
+                                {dayArray.length < 7 && <button className={`h-16 rounded-lg my-auto mx-auto flex justify-center items-center border-2 w-16 text-2xl`} name={'days'} onClick={AddManager}> + </button>}
                             </div>
                         </div>
                         <div className={'w-[48%]'}>
@@ -182,17 +116,17 @@ export const HabitCreationForm = () => {
                                 <div>
                                     {
                                         notificationArray.map((number) =>
-                                            <input key={number} className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} name={'notifications' + number} type={'time'} onChange={changesManager}/>
+                                            <input key={number} className={`h-16 rounded-lg my-1 flex justify-between border-2 p-4 w-full`} name={'notifications' + number} type={'time'} onChange={ChangesManager}/>
                                         )
                                     }
-                                    {notificationArray.length < 7 && <button className={`h-16 rounded-lg my-auto mx-auto flex justify-center items-center border-2 w-16 text-2xl`} name={'notifications'} onClick={addManager}> + </button>}
+                                    {notificationArray.length < 7 && <button className={`h-16 rounded-lg my-auto mx-auto flex justify-center items-center border-2 w-16 text-2xl`} name={'notifications'} onClick={AddManager}> + </button>}
                                 </div> :
-                                <button className={`h-16 rounded-lg my-auto mx-auto flex justify-center items-center border-2 w-16 text-2xl`} name={'notifications'} onClick={addManager}> + </button>
+                                <button className={`h-16 rounded-lg my-auto mx-auto flex justify-center items-center border-2 w-16 text-2xl`} name={'notifications'} onClick={AddManager}> + </button>
                             }
                         </div>
                     </div>
                     <div className={' flex flex-col justify-around h-full w-full mx-auto my-2'}>
-                        <button className={`${Colors[selectedAtributes.color].primary} h-16 rounded-lg my-1 flex justify-center items-center font-semibold border-2 hover:cursor-pointer`} type={'submit'}>
+                        <button className={`${Colors[selectedAttributes.color].primary} h-16 rounded-lg my-1 flex justify-center items-center font-semibold border-2 hover:cursor-pointer`} type={'submit'}>
                             Create Habit!
                         </button>
                     </div>
