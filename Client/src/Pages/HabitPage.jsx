@@ -45,7 +45,8 @@ export const HabitPage = () => {
                             trailColor: rgbSecondaryColor,
                         })} />
                     </div>
-                    <button className={'bg-amber-600 w-10 h-10 mx-auto mt-5 rounded-3xl'} onClick={updateProgress}>
+                    <button onClick={updateProgress}>
+                        <svg className={'fill-red rotate-45'} from={"/src/images/Add.svg"} src="/src/images/Add.svg" alt=""/>
                     </button>
                 </div>
             </div>

@@ -15,6 +15,8 @@ export const Landing = () => {
     const dispatch = useDispatch();
     not.componentDidMount();
 
+    console.log(habits)
+
     useEffect(() => {
         for (let i = 0; i < habits.length; i++) {
             habits[i].frequency.forEach((day) => {

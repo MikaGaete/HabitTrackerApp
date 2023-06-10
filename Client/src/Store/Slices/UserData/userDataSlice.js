@@ -33,7 +33,9 @@ export const userDataSlice = createSlice({
             }
         },
         updateHabitProgress: (state, action) => {
-            state.habits[action.payload.index].history[action.payload.historyIndex].progress = action.payload.newProgress;
+            if (parseFloat(state.habits[action.payload.index].goal.number) >= parseFloat(action.payload.newProgress)) {
+                state.habits[action.payload.index].history[action.payload.historyIndex].progress = action.payload.newProgress;
+            }
         },
         updateLocalSave: (state) => {
             localStorage.removeItem('HabitTrackerAppData');
