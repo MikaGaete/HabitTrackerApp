@@ -1,5 +1,11 @@
 const {Connection} = require("../Credentials/Credentials");
 
+const loginUser = (req, res) => {
+    const {email, password} = req.body;
+
+    const query = "";
+}
+
 const createNewUser = (req, res) => {
     const {name, email, password} = req.body;
 
