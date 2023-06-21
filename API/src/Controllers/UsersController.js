@@ -3,7 +3,27 @@ const {Connection} = require("../Credentials/Credentials");
 const loginUser = (req, res) => {
     const {email, password} = req.body;
 
-    const query = "";
+    const stringQuery = "select string from users where email = ?";
+    const verificationQuery = "select id, name, email from users where email = ? and password = sha(?, 256);";
+
+    Connection.query(stringQuery, [email], (result, error) => {
+        if (error) {
+            res.status(404).send(error);
+        }
+        else if (result === undefined) {
+            // Error msg
+        }
+        else {
+            const pass = password + result[0];
+
+            Connection.query(verificationQuery, [email, pass], (result, error) => {
+                if (error) {
+                    res.status(404).send(error);
+                }
+                else res.status(200).send(result);
+            });
+        }
+    });
 }
 
 const createNewUser = (req, res) => {
@@ -72,6 +92,7 @@ const findOneAndUpdate = (req, res) => {
 }
 
 module.exports = {
+    loginUser,
     createNewUser,
     findOneByEmail,
     findOneById,
