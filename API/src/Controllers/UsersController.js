@@ -29,7 +29,7 @@ const loginUser = (req, res) => {
 const createNewUser = (req, res) => {
     const {name, email, password} = req.body;
 
-    const query = "insert into users (name, email, password, string) values (?, ?, sha2(?, 256), ?);";
+    const query = "insert into users (id, name, email, password, string) values (uuid(), ?, ?, sha2(?, 256), ?);";
 
     Connection.query(query, [name, email, password], (result, error) => {
         if (error) {

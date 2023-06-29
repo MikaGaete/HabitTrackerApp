@@ -46,7 +46,7 @@ export const HabitPage = () => {
                         })} />
                     </div>
                     <button onClick={updateProgress}>
-                        <svg className={'fill-red rotate-45'} from={"/src/images/Add.svg"} src="/src/images/Add.svg" alt=""/>
+                        <img className={'bg-red rotate-45 mx-auto py-10'} src="/src/images/Add.svg" alt=""/>
                     </button>
                 </div>
             </div>

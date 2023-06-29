@@ -38,7 +38,8 @@ export const Landing = () => {
     }, [currentDate]);
 
     return (
-        historyReady && <div className={'w-[100vw] h-full min-h-screen'}>
+        historyReady &&
+        <div className={'w-[100vw] h-full min-h-screen'}>
             <div className={'flex flex-col justify-between min-h-screen h-full p-4'}>
                 <div className={'flex flex-col justify-around h-full mx-auto'}>
                     <div className={'mx-auto font-bold text-2xl'}>

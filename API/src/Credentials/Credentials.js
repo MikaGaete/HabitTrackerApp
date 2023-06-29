@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 
 const Connection = mysql.createPool({
-    host: 'localhost',
+    host: '192.168.100.45',
     user: 'root',
     password: 'password',
     database: 'HabitTrackerApp',

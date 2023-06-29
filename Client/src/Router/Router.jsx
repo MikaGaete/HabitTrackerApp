@@ -6,13 +6,14 @@ import {HabitCreation} from "@pages/HabitCreation.jsx";
 import {HabitCreationForm} from "@pages/HabitCreationForm.jsx";
 import {HabitPage} from "@pages/HabitPage.jsx";
 import React from "react";
+import {NewLanding} from "@pages/NewLanding.jsx";
 
 export const Router = () => {
     return (
         <BrowserRouter>
             <Provider store={store}>
                 <Routes>
-                    <Route path={'/'} element={<Landing/>}/>
+                    <Route path={'/'} element={<NewLanding/>}/>
                     <Route path={'/habit/new'} element={<HabitCreation/>}/>
                     <Route path={'/habit/new/:category/:name/:icon/:color'} element={<HabitCreationForm/>}/>
                     <Route path={'/habit/:id'} element={<HabitPage/>}/>
