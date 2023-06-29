@@ -1,64 +1,56 @@
-const {Connection} = require("../Credentials/Credentials");
+const {PrismaClient} = require('@prisma/client');
+const {UniqueIdentifierGenerator} = require("../Utilities/UniqueIdentifierGenerator");
+const prisma= new PrismaClient();
 
-const createNewHabit = (req, res) => {
+const createNewHabit = async (req, res) => {
     const {associatedUser, name, icon, color, type, goal, goalUnit} = req.body;
 
-    const getIcon = `(select id from icons where name = ?)`;
-    const getColor = `(select id from colors where name = ?)`;
-    const getType = `(select id from types where name = ?)`;
-    const values = `(uuid(), ?, ?, ${getIcon}, ${getColor}, ${getType}, ?, ?)`
-    const query = `insert into habits (id, associatedUser, name, icon, color, type, goal, goalUnit) values ${values};`;
-
-    Connection.query(query, [associatedUser, name, icon, color, type, goal, goalUnit], (result, error) => {
-        if (error) {
-            res.status(404).send(error);
-        }
-        else res.status(200).send(result);
-    });
-}
-
-const findOneById = (req, res) => {
-    const {id, associatedUser} = req.body;
-
-    const query = "select * from habits where id = ? and associatedUser = ?;";
-
-    Connection.query(query, [id, associatedUser], (result, error) => {
-        if (error) {
-            res.status(404).send(error);
-        }
-        else res.status(200).send(result);
+    const assets = await new Promise(resolve => {
+        fetch(`${process.env.API_IP}/assets/find/byIds/${icon}/${color}/${type}`)
+            .then((response) => response.json())
+            .then((data) => resolve(data));
     })
-}
 
-const findAllByUser = (req, res) => {
-    const {associatedUser} = req.body;
-
-    const query = "select * from habits where associatedUser = ?;";
-
-    Connection.query(query, [associatedUser], (result, error) => {
-        if (error) {
-            res.status(404).send(error);
+    const newHabit = await prisma.habit.create({
+        data : {
+            id: UniqueIdentifierGenerator(),
+            name: name,
+            goal: goal,
+            goalUnit: goalUnit,
+            ...assets,
+            userID: associatedUser
         }
-        else res.status(200).send(result);
     });
+
+    res.status(201).send(newHabit);
 }
 
-const findAllByType = (req, res) => {
-    const {type, associatedUser} = req.body;
+const findHabitById = async (req, res) => {
+    const {habitID} = req.params;
 
-    const query = "select from habits where type = (select id from types where name = ?) and associatedUser = ?;";
+    const desiredHabit = await prisma.habit.findUnique({
+        where: {id: habitID}
+    });
 
-    Connection.query(query, [type, associatedUser], (result, error) => {
-        if (error) {
-            res.status(404).send(error);
-        }
-        else res.status(200).send(result);
+    const {iconID, colorID, typeID, ...habitData} = desiredHabit;
+
+    const assets = await new Promise(resolve => {
+        fetch(`${process.env.API_IP}/assets/find/byIds/${iconID}/${colorID}/${typeID}`)
+            .then((response) => response.json())
+            .then((data) => resolve(data));
     })
+
+    const fullHabitData = {
+        ...habitData,
+        ...assets
+    }
+
+    res.status(200).send(fullHabitData);
 }
+
+
 
 module.exports = {
     createNewHabit,
-    findOneById,
-    findAllByUser,
-    findAllByType,
+    findHabitById
 }
