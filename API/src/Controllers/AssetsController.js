@@ -1,7 +1,7 @@
 const {PrismaClient} = require('@prisma/client');
 const prisma= new PrismaClient();
 
-const findAssetsByIds = async (req, res) => {
+const findAssetsForHabitsByIds = async (req, res) => {
     const {iconID, colorID, typeID} = req.params;
 
     const iconName = await prisma.icon.findUnique({
@@ -26,7 +26,7 @@ const findAssetsByIds = async (req, res) => {
     res.status(200).send(assets);
 }
 
-const findAssetsByNames = async (req, res) => {
+const findAssetsForHabitsByNames = async (req, res) => {
     const {iconName, colorName, typeName} = req.params;
 
     const iconID = await prisma.icon.findUnique({
@@ -51,7 +51,49 @@ const findAssetsByNames = async (req, res) => {
     res.status(200).send(assets);
 }
 
+const findAssetsForNotificationsByIds = async (req, res) => {
+    const {iconID, dayID} = req.params;
+
+    const iconName = await prisma.icon.findUnique({
+        where: {id: Number(iconID)},
+        select: {name: true}
+    });
+    const dayName = await prisma.color.findUnique({
+        where: {id: Number(dayID)},
+        select: {name: true}
+    });
+
+    const assets = {
+        iconName: iconName.name,
+        dayName: dayName.name
+    }
+
+    res.status(200).send(assets);
+}
+
+const findAssetsForNotificationsByNames = async (req, res) => {
+    const {iconName, dayName} = req.params;
+
+    const iconID = await prisma.icon.findUnique({
+        where: {name: iconName},
+        select: {id: true}
+    });
+    const dayID = await prisma.day.findUnique({
+        where: {name: dayName},
+        select: {id: true}
+    });
+
+    const assets = {
+        iconID: iconID.id,
+        dayID: dayID.id
+    }
+
+    res.status(200).send(assets);
+}
+
 module.exports = {
-    findAssetsByIds,
-    findAssetsByNames
+    findAssetsForHabitsByIds,
+    findAssetsForHabitsByNames,
+    findAssetsForNotificationsByIds,
+    findAssetsForNotificationsByNames
 }

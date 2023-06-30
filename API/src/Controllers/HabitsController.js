@@ -6,7 +6,7 @@ const createNewHabit = async (req, res) => {
     const {associatedUser, name, icon, color, type, goal, goalUnit} = req.body;
 
     const assets = await new Promise(resolve => {
-        fetch(`${process.env.API_IP}/assets/find/byIds/${icon}/${color}/${type}`)
+        fetch(`${process.env.API_IP}/assets/find/forHabits/byIds/${icon}/${color}/${type}`)
             .then((response) => response.json())
             .then((data) => resolve(data));
     })
@@ -35,7 +35,7 @@ const findHabitById = async (req, res) => {
     const {iconID, colorID, typeID, ...habitData} = desiredHabit;
 
     const assets = await new Promise(resolve => {
-        fetch(`${process.env.API_IP}/assets/find/byIds/${iconID}/${colorID}/${typeID}`)
+        fetch(`${process.env.API_IP}/assets/find/forHabits/byIds/${iconID}/${colorID}/${typeID}`)
             .then((response) => response.json())
             .then((data) => resolve(data));
     })
